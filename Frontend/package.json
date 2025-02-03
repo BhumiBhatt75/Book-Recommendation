@@ -3,26 +3,17 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-<<<<<<< HEAD
-=======
-  "proxy": "http://localhost:5000",
->>>>>>> f44c18c2c63d02b5eb16d323a8461af4e28d51f1
+  
   "scripts": {
     "dev": "vite",
+    "start": "vite",  
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
-<<<<<<< HEAD
-    
-  },
-  "dependencies": {
-    "axios": "^1.7.7",
-=======
   },
   "dependencies": {
     "axios": "^1.7.7",
     "html-react-parser": "^5.1.18",
->>>>>>> f44c18c2c63d02b5eb16d323a8461af4e28d51f1
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.27.0"

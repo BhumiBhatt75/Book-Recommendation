@@ -1,27 +1,35 @@
 const express = require("express");
-const connectDB = require("./config/db");
+const connectDB = require("./config/db"); // Your MongoDB connection function
 const cors = require("cors");
 const dotenv = require("dotenv");
+const authRoutes = require("./routes/authRoutes");
+const userRoutes = require("./routes/userRoutes");
+
+
+dotenv.config(); // Load environment variables
+
+const app = express();
 const PORT = process.env.PORT || 5000;
-// Load environment variables
-dotenv.config();
 
 // Connect to MongoDB
 connectDB();
 
-const app = express();
+// Middleware
 
-// Middleware to parse JSON bodies
-app.use(express.json());
-app.use(cors());          
+app.use(express.json()); // Parse JSON requests
+app.use(cors({ origin: "http://localhost:5173" })); // Enable CORS for all routes
 
-// Import auth routes
-const authRoutes = require("./routes/auth");
-
-// Use routes
+// Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/user", userRoutes);
 
 
+// Basic root endpoint
+app.get("/", (req, res) => {
+  res.send("API is running");
+});
+
+// Start server
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });

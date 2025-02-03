@@ -1,109 +1,116 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { useUser } from "../context/UserContext"; // Import the context
 import axios from "axios";
-<<<<<<< HEAD
-=======
-import { useNavigate } from "react-router-dom";
->>>>>>> f44c18c2c63d02b5eb16d323a8461af4e28d51f1
 
 const Login = () => {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-<<<<<<< HEAD
-=======
-  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
->>>>>>> f44c18c2c63d02b5eb16d323a8461af4e28d51f1
+  const { setUserId } = useUser(); // Get setUserId from context
 
-  const handleLogin = async (e) => {
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, []);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/login", {
-        email,
-        password,
-      });
-<<<<<<< HEAD
-      console.log(res.data); // You can handle the login response here
-    } catch (err) {
-      console.error("Login failed:", err.response.data);
-=======
+      const response = await axios.post(
+        "http://localhost:5000/api/auth/login",
+        {
+          email,
+          password,
+        }
+      );
 
-      if (res.status === 200) {
-        navigate("/books");
-      } else {
-        setMessage(res.data.message);
-      }
+      // Save token and userId in context
+      localStorage.setItem("token", response.data.token);
+      setUserId(response.data.userId); // Set userId in context
+
+      navigate("/home"); // Navigate after login
     } catch (err) {
-      setMessage("Login failed. Please check your credentials.");
->>>>>>> f44c18c2c63d02b5eb16d323a8461af4e28d51f1
+      setError(err.response?.data.message || "Error logging in");
     }
   };
 
   return (
-<<<<<<< HEAD
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <div className="max-w-md w-full bg-white p-6 shadow-md rounded-lg">
-        <h2 className="text-2xl font-bold mb-6">Login to Your Account</h2>
-        <form onSubmit={handleLogin}>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="email">
-              Email
-            </label>
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-gray-900 to-black text-white">
+      {/* Dynamic Background */}
+      <div
+        className="absolute inset-0 bg-[radial-gradient(circle,_var(--tw-gradient-stops))] from-purple-900 to-transparent opacity-50"
+        style={{
+          backgroundPosition: `${mousePosition.x}px ${mousePosition.y}px`,
+          transition: "background-position 0.3s ease-out",
+        }}
+      ></div>
+
+      {/* Floating Particles */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        {[...Array(20)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute rounded-full bg-white opacity-20 animate-float"
+            style={{
+              width: `${Math.random() * 10 + 5}px`,
+              height: `${Math.random() * 10 + 5}px`,
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDuration: `${Math.random() * 10 + 10}s`,
+              animationDelay: `${Math.random() * 5}s`,
+            }}
+          ></div>
+        ))}
+      </div>
+
+      {/* Login Content */}
+      <div className="relative z-10 flex items-center justify-center min-h-screen">
+        <div className="bg-white p-4 rounded-2xl shadow-xl max-w-md w-full text-center transform transition duration-500 hover:scale-105">
+          <h1 className="text-3xl font-extrabold mb-4 text-transparent bg-clip-text bg-blue-900">
+            Login
+          </h1>
+          {error && <p className="text-red-500 mb-2">{error}</p>}
+          <form onSubmit={handleSubmit}>
             <input
               type="email"
-              id="email"
+              placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none"
+              className="border text-blue-950 font-semibold p-3 rounded-lg w-full mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="password">
-              Password
-            </label>
             <input
               type="password"
-              id="password"
+              placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none"
+              className="border text-blue-950 font-semibold p-3 rounded-lg w-full mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
-          </div>
-          <button className="w-full bg-blue-600 text-white py-2 rounded-lg">
-            Login
-          </button>
-        </form>
-=======
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 to-teal-500">
-      <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
-        <h1 className="text-2xl font-bold text-center mb-6">Login</h1>
-        <form onSubmit={handleLogin}>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Email"
-            className="border rounded p-2 w-full mb-4"
-            required
-          />
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-            className="border rounded p-2 w-full mb-4"
-            required
-          />
-          <button
-            type="submit"
-            className="bg-blue-600 text-white p-2 rounded w-full hover:bg-blue-700 transition duration-300"
-          >
-            Login
-          </button>
-        </form>
-        {message && <p className="text-red-500 text-center mt-2">{message}</p>}
->>>>>>> f44c18c2c63d02b5eb16d323a8461af4e28d51f1
+            <button
+              type="submit"
+              className="w-1/4 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition duration-300 transform hover:scale-105"
+            >
+              Login
+            </button>
+          </form>
+          <p className="mt-4 text-gray-700">
+            Don’t have an account?{" "}
+            <Link to="/register" className="text-blue-600 font-semibold hover:underline">
+              Register here
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

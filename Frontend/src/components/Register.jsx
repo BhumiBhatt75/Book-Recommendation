@@ -1,155 +1,123 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-<<<<<<< HEAD
-=======
-import { useNavigate } from "react-router-dom";
->>>>>>> f44c18c2c63d02b5eb16d323a8461af4e28d51f1
 
 const Register = () => {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-<<<<<<< HEAD
-  const [message, setMessage] = useState("");
-=======
   const [username, setUsername] = useState("");
-  const [message, setMessage] = useState("");
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
->>>>>>> f44c18c2c63d02b5eb16d323a8461af4e28d51f1
 
-  const handleRegister = async (e) => {
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, []);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const res = await axios.post("http://localhost:5000/api/auth/register", {
-        name,
-        email,
-        password,
-<<<<<<< HEAD
-      });
+    setError(null);
 
-      if (res && res.data) {
-        setMessage(res.data.message); // Set success message from response
-      } else {
-        setMessage("An unexpected error occurred. Please try again.");
-      }
+    try {
+      const response = await axios.post("/api/auth/register", { name, email, password, username });
+      navigate("/login");
     } catch (err) {
-      if (err.response && err.response.data) {
-        setMessage(err.response.data.message); // Set error message from response
-      } else {
-        setMessage("An error occurred. Please check your connection.");
-      }
+      setError(err.response?.data.message || "Error registering");
     }
   };
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <div className="max-w-md w-full bg-white p-6 shadow-md rounded-lg">
-        <h2 className="text-2xl font-bold mb-6">Create Your Account</h2>
-        {message && <p className="text-red-500">{message}</p>}{" "}
-        {/* Display message */}
-        <form onSubmit={handleRegister}>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="name">
-              Name
-            </label>
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-gray-900 to-black text-white">
+      {/* Dynamic Background */}
+      <div
+        className="absolute inset-0 bg-[radial-gradient(circle,_var(--tw-gradient-stops))] from-purple-900 to-transparent opacity-50"
+        style={{
+          backgroundPosition: `${mousePosition.x}px ${mousePosition.y}px`,
+          transition: "background-position 0.3s ease-out",
+        }}
+      ></div>
+
+      {/* Floating Particles */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        {[...Array(20)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute rounded-full bg-white opacity-20 animate-float"
+            style={{
+              width: `${Math.random() * 10 + 5}px`,
+              height: `${Math.random() * 10 + 5}px`,
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDuration: `${Math.random() * 10 + 10}s`,
+              animationDelay: `${Math.random() * 5}s`,
+            }}
+          ></div>
+        ))}
+      </div>
+
+      {/* Register Content */}
+      <div className="relative z-10 flex items-center justify-center min-h-screen">
+        <div className="bg-white p-4 rounded-2xl shadow-xl max-w-md w-full text-center transform transition duration-500 hover:scale-105">
+          <h1 className="text-3xl font-extrabold mb-4 text-transparent bg-clip-text bg-blue-900">
+            Create Account
+          </h1>
+          {error && <p className="text-red-500 mb-2">{error}</p>}
+          <form onSubmit={handleSubmit}>
             <input
               type="text"
-              id="name"
+              placeholder="Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none"
+              className="border text-blue-950 font-semibold p-3 rounded-lg w-full mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="email">
-              Email
-            </label>
             <input
               type="email"
-              id="email"
+              placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none"
+              className="border text-blue-950 font-semibold p-3 rounded-lg w-full mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="password">
-              Password
-            </label>
             <input
               type="password"
-              id="password"
+              placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none"
+              className="border text-blue-950 font-semibold p-3 rounded-lg w-full mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
-          </div>
-          <button className="w-full bg-green-600 text-white py-2 rounded-lg">
-            Register
-          </button>
-        </form>
-=======
-        username,
-      });
-
-      if (res.status === 201) {
-        navigate("/books");
-      } else {
-        setMessage(res.data.message);
-      }
-    } catch (err) {
-      setMessage("Registration failed.");
-    }
-  };
-
-  return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-teal-500 to-blue-500">
-      <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
-        <h1 className="text-2xl font-bold text-center mb-6">Register</h1>
-        <form onSubmit={handleRegister}>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Name"
-            className="border rounded p-2 w-full mb-4"
-            required
-          />
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Username"
-            className="border rounded p-2 w-full mb-4"
-            required
-          />
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Email"
-            className="border rounded p-2 w-full mb-4"
-            required
-          />
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-            className="border rounded p-2 w-full mb-4"
-            required
-          />
-          <button
-            type="submit"
-            className="bg-teal-600 text-white p-2 rounded w-full hover:bg-teal-700 transition duration-300"
-          >
-            Register
-          </button>
-        </form>
-        {message && <p className="text-red-500 text-center mt-2">{message}</p>}
->>>>>>> f44c18c2c63d02b5eb16d323a8461af4e28d51f1
+            <input
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="border text-blue-950 font-semibold p-3 rounded-lg w-full mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+            <button
+              type="submit"
+              className="w-1/4 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition duration-300 transform hover:scale-105"
+            >
+              Register
+            </button>
+          </form>
+          <p className="mt-4 text-gray-700">
+            Already have an account?{" "}
+            <Link to="/login" className="text-blue-600 font-semibold hover:underline">
+              Login
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );
