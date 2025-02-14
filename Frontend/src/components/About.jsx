@@ -83,23 +83,15 @@ const About = () => {
         {/* Interactive Buttons */}
         <div className="flex space-x-6 mt-10">
           <Link
-            to="/login"
+            to="/home"
             className="group relative px-8 py-3 overflow-hidden rounded-lg bg-white text-gray-900 shadow-2xl transition-all duration-300 hover:scale-105"
           >
             <span className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-purple-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0"></span>
             <span className="relative z-10 font-semibold group-hover:text-white transition-colors duration-300">
-              Login
+             Dive In
             </span>
           </Link>
-          <Link
-            to="/register"
-            className="group relative px-8 py-3 overflow-hidden rounded-lg bg-purple-600 text-white shadow-2xl transition-all duration-300 hover:scale-105"
-          >
-            <span className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-pink-500 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0"></span>
-            <span className="relative z-10 font-semibold">
-              Register
-            </span>
-          </Link>
+         
         </div>
       </div>
 
